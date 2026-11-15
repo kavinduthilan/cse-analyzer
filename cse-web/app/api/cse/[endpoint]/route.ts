@@ -3,7 +3,7 @@ import { cse } from "@/lib/cse";
 
 const ALLOWED = new Set([
   "chartData", "companyChartDataByStock", "companyInfoSummery", "todaySharePrice", "marketStatus",
-  "marketSummery", "aspiData", "snpData", "allSectors", "detailedTrades", "dailyMarketSummery",
+  "marketSummery", "aspiData", "snpData", "allSectors", "detailedTrades", "dailyMarketSummery", "alphabetical", "allSecurityCode"
 ]);
 
 // Browser -> this route -> cse.lk (avoids CORS)

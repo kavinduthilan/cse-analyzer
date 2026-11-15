@@ -1,10 +1,12 @@
-import { cse, asArray, toRow } from "@/lib/cse";
+import { cseGET, asArray, toRow } from "@/lib/cse";
 import StocksExplorer from "@/components/StocksExplorer";
 
 export const revalidate = 30;
 
 export default async function Stocks() {
-  const rows = asArray(await cse("todaySharePrice")).map(toRow).filter((r) => r.symbol);
+
+  console.log('starting');
+  const rows = asArray(await cseGET("allSecurityCode")).map(toRow).filter((r) => r.symbol);
 
   console.log('rows', rows);
   return (
@@ -14,3 +16,8 @@ export default async function Stocks() {
     </div>
   );
 }
+
+
+// list_by_type  - N
+// tradeSummary
+// allSecurityCode

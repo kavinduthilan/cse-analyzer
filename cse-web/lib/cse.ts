@@ -18,6 +18,37 @@ export async function cse<T = any>(endpoint: string, params: Params = {}, revali
   }
 }
 
+
+export async function cseGET<T = any>(endpoint: string, params: Params = {}, revalidate = 30): Promise<T | null> {
+  try {
+    const qs = new URLSearchParams(
+      Object.entries(params).map(([k, v]) => [k, String(v)])
+    ).toString();
+
+    const res = await fetch(BASE + endpoint + (qs ? `?${qs}` : ""), {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        // CSE may reject requests that don't look like a browser
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36",
+        Referer: "https://www.cse.lk/",
+        Origin: "https://www.cse.lk",
+      },
+      next: { revalidate },
+    });
+
+    if (!res.ok) {
+      console.error(`cseGET ${endpoint} -> ${res.status} ${res.statusText}`);
+      return null;
+    }
+    return (await res.json()) as T;
+  } catch (e) {
+    console.error(`cseGET ${endpoint} threw:`, e);
+    return null;
+  }
+}
+
 /** CSE responses vary in shape; pull the first array out of whatever came back. */
 export function asArray(data: any): any[] {
   if (Array.isArray(data)) return data;
